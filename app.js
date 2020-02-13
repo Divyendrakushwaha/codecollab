@@ -11,7 +11,7 @@ const MongoClient = require( 'mongodb' ).MongoClient;
 var passport = require('passport');
 var session = require('express-session');
 var config = require('./config');
-
+var cookieSession = require('cookie-session')
 require('./passport');
 var indexRoute = require('./routes/index');
 var authRoute = require('./routes/auth');
@@ -34,27 +34,33 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 
 app.use(cookieParser());
-app.use(session({
-    secret: config.sessionKey,
-    resave: false,
-    saveUninitialized: true
+app.use(cookieSession({
+  cookieName: 'session',
+   secret: 'anything',
+  resave:false,
+  saveUninitialized: false
 }));
-app.use(session({ secret: 'anything' }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next) {
-  if (req.isAuthenticated()) {
-    res.locals.user = req.user;
-  }
-  next();
-});
+// app.use(function(req, res, next) {
+//   if (req.isAuthenticated()) {
+//     res.locals.user = req.user;
+//     console.log(res.locals.user);
+//   }
+//   next();
+// });
 
 app.use('/', indexRoute);
 app.use('/', authRoute);
 app.use('/', taskRoute);
+app.get('/hello',
+  function(req, res) {
+    console.log(req.user);
+    res.render('index', { user: req.user });
+  });
 
 
 
@@ -80,18 +86,18 @@ app.use(function(err, req, res, next) {
 //   if (err) throw err;
 //   console.log("1 document inserted");
 // });
-var mongoUtil = require( './lib/mongoUtil' );
+// var mongoUtil = require( './lib/mongoUtil' );
 
-mongoUtil.connectToServer( function( err, client ) {
-  if (err) console.log(err);
-  // start the rest of your app here
-  // var mongoUtil = require( 'mongoUtil' );
-var db = mongoUtil.getDb();
+// mongoUtil.connectToServer( function( err, client ) {
+//   if (err) console.log(err);
+//   // start the rest of your app here
+//   // var mongoUtil = require( 'mongoUtil' );
+// var db = mongoUtil.getDb();
 
-db.collection( 'User' ).find();
-// console.log(db)
+// db.collection( 'User' ).find();
+// // console.log(db)
 
-} );
+// });
 // var database = mongoUtil.getDb();
 // // console.log(db);
 

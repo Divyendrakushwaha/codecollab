@@ -11,12 +11,16 @@ var db = mongoUtil.getDb();
 var cl1=db.collection( 'User' );
 router.route('/login')
   .get(function(req, res, next) {
+    
     res.render('login', { title: 'Login your account'});
   })
   .post(passport.authenticate('local', {
     failureRedirect: '/login'
-  }), function (req, res) {
+  }), function (req, res,next) {
+    // console.log(req.body);
+    // return next()
     res.redirect('/');
+  
   });
 
 router.route('/register')
@@ -46,7 +50,7 @@ router.route('/register')
         if (err) {
                   res.render('register', {errorMessages: err});
                 } else {
-                  res.redirect('/login');
+                  res.redirect('localhost:3000/login');
                 }
             });
             // db.close();
@@ -59,6 +63,14 @@ router.route('/register')
     //   })
     }
   });
+
+  router.get('/login/current_user', function(req, res) {
+    
+    console.log(req.user);
+    
+    res.render('index', { title: 'test' });
+  });
+
 
 router.get('/logout', function (req, res) {
   req.logout();
@@ -76,7 +88,7 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 
 } );
 // var d
-
-
-
 module.exports = router;
+
+
+

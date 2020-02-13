@@ -6,8 +6,11 @@ var nodemailer = require('nodemailer');
 // var transporter = nodemailer.createTransport(config.mailer);
 
 /* GET home page. */
+
+
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Code Talkers - a platform for sharing code.' });
+  console.log(req.user);
+  res.render('index', { title: 'Code Talkers - a platform for sharing code.', 'user': req.user });
 });
 
 router.get('/about', function(req, res, next) {
@@ -35,7 +38,7 @@ router.route('/contact')
     } else {
       var mailOptions = {
         from: 'Code Talkers <no-reply@code4share.com>',
-        to: 'shomikprogrammer@gmail.com',
+        to: 'karankhiani.kk@gmail.com',
         subject: 'You got a new message from visitor 💋 😽',
         text: req.body.message
       };

@@ -3,6 +3,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var mongoUtil = require( './lib/mongoUtil' );
 var User=require('./models/user');
+var user1 = new User();
 mongoUtil.connectToServer( function( err, client ) {
     if (err) console.log(err);
     // start the rest of your app here
@@ -24,19 +25,23 @@ passport.use(new LocalStrategy({
   },
   function (username, password, done) {
     console.log(cl1.findOne({email: username}));
+    
     cl1.findOne({email: username}, function (err, user) {
       if (err) return done(err);
+      
+      
       if (!user) {
         return done(null, false, {
           message: 'Incorrect username or password'
         });
       }
-      if (!user.validPassword(password)) {
+      
+      if (!user1.validPassword(password,user.salt,user.hash)) {
         return done(null, false, {
           message: 'Incorrect username or password'
         });
       }
-
+      console.log(user)
       return done(null, user);
     })
   }

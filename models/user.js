@@ -13,7 +13,8 @@ var userSchema = new mongoose.Schema({
   },
   hash: String,
   salt: String,
-  facebookId: String
+  facebookId: String,
+  salt1:String
 });
 
 userSchema.methods.setPassword = function(password) {
@@ -21,9 +22,15 @@ userSchema.methods.setPassword = function(password) {
   this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha1').toString('hex');
 };
 
-userSchema.methods.validPassword = function(password) {
-  var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, 'sha1').toString('hex');
-  return this.hash === hash;
+userSchema.methods.validPassword = function(password,salt,hash) {
+  var hash1 = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha1').toString('hex');
+
+  return hash === hash1;
+  // return true;
 };
+userSchema.methods.test = function(){
+  console.log("test");
+
+}
 
 module.exports = mongoose.model('User', userSchema);

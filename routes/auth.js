@@ -16,6 +16,7 @@ router.route('/login')
   .post(passport.authenticate('local', {
     failureRedirect: '/login'
   }), function (req, res) {
+    console.log(req.user);
     res.redirect('/');
   });
 
@@ -46,7 +47,7 @@ router.route('/register')
         if (err) {
                   res.render('register', {errorMessages: err});
                 } else {
-                  res.redirect('/login');
+                  res.redirect('localhost:3000/login');
                 }
             });
             // db.close();
@@ -59,6 +60,12 @@ router.route('/register')
     //   })
     }
   });
+
+  router.get('/current_user', function(req, res, next) {
+    console.log(req.user);
+    res.render('index', { title: 'test' });
+  });
+
 
 router.get('/logout', function (req, res) {
   req.logout();

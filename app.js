@@ -39,7 +39,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
-
+app.use(session({ secret: 'anything' }));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -55,6 +55,7 @@ app.use(function(req, res, next) {
 app.use('/', indexRoute);
 app.use('/', authRoute);
 app.use('/', taskRoute);
+
 
 
 

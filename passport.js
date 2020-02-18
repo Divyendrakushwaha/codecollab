@@ -1,8 +1,10 @@
+var ObjectId = require('mongodb').ObjectID;
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var mongoUtil = require( './lib/mongoUtil' );
 var User=require('./models/user');
+
 var user1 = new User();
 mongoUtil.connectToServer( function( err, client ) {
     if (err) console.log(err);
@@ -11,17 +13,18 @@ mongoUtil.connectToServer( function( err, client ) {
   var db = mongoUtil.getDb();
   var cl1=db.collection( 'User' );
   passport.serializeUser(function (user, cb) {
-    console.log("serialize",user._id)
+    // console.log("serialize",user._id)
     cb(null, user._id);
   });
   
   passport.deserializeUser(function (id, cb) {
-    console.log("deseralize",id)
-    console.log("sdf",cl1.findOne({ _id : id}));
-    cl1.findOne({ email : 'karankhiani.kk@gmail.com'}, function (err, user) {
+    // console.log("deseralize",id)
+    var o_id = new ObjectId(id);
+    // console.log("sdf",cl1.findOne({ _id : o_id}));
+    cl1.findOne({ _id : o_id}, function (err, user) {
       if (err) { return cb(err);
       console.log(err); }
-      console.log(user)
+      // console.log(user)
       cb(err, user);
     })
   });

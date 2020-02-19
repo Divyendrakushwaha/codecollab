@@ -1,5 +1,5 @@
 var express = require('express');
-
+var ObjectId = require('mongodb').ObjectID;
 var mongoUtil = require( './../lib/mongoUtil' );
 var Task=require('./../models/task');
 var router = express.Router();
@@ -12,27 +12,33 @@ mongoUtil.connectToServer( function( err, client ) {
 
 router.get('/createTask', function(req, res) {
   var newTask = new Task();
-
+  newTask.content="";
   cl2.insertOne(newTask,function( err, data) {
     if (err) {
       console.log(err);
       res.render('error');
     } else {
-      res.redirect('/task/' + data._id);
+      
+      res.redirect('/task/' + newTask._id);
     }
   })
 });
 
 router.get('/task/:id', function(req, res) {
+ 
+  if(req.user){
+  var o_id = new ObjectId(req.params.id);
   if (req.params.id) {
-    Task.findOne({_id: req.params.id}, function(err, data) {
+    cl2.findOne({_id: o_id}, function(err, data) {
+      
       if (err) {
         console.log(err);
         res.render('error');
       }
 
       if (data) {
-        res.render('task', {content: data.content, roomId: data.id});
+        
+        res.render('task', {content: data.content, roomId: data._id,user: req.user});
       } else {
         res.render('error');
       }
@@ -40,6 +46,7 @@ router.get('/task/:id', function(req, res) {
   } else {
     res.render('error');
   }
+}else{res.redirect('/login')}
 });
 
 });

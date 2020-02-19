@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressValidator());
 
 app.use(cookieParser());
-app.use(cookieSession({
+app.use(session({
   cookieName: 'session',
    secret: 'anything',
   resave:false,

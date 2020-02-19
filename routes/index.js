@@ -14,12 +14,12 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/about', function(req, res, next) {
-  res.render('about', { title: 'Code Talkers - a platform for sharing code.'});
+  res.render('about', { title: 'Code Talkers - a platform for sharing code.','user': req.user});
 });
 
 router.route('/contact')
   .get(function(req, res, next) {
-    res.render('contact', { title: 'Code4Share - a platform for sharing code.'});
+    res.render('contact', { title: 'Code4Share - a platform for sharing code.','user': req.user});
   })
   .post(function(req, res, next) {
     req.checkBody('name', 'Empty name').notEmpty();

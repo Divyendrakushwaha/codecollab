@@ -34,6 +34,7 @@ router.route('/register')
     req.checkBody('password', 'Password do not match').equals(req.body.confirmPassword).notEmpty();
     console.log(req.body);
     var errors = req.validationErrors();
+    flag=0;
     if (errors) {
       res.render('register', {
         name: req.body.name,
@@ -46,14 +47,17 @@ router.route('/register')
       user.email = req.body.email;
       user.setPassword(req.body.password);
     //   console.log(db.user)
-    cl1.insertOne(user, function(err, res) {
+    cl1.insertOne(user, function(req, res, err) {
         if (err) {
                   res.render('register', {errorMessages: err});
                 } else {
-                  res.redirect('localhost:3000/login');
+                  console.log("here2")
+                  flag=1;
+                  // res.redirect('localhost:3000/login');
                 }
             });
             // db.close();
+            console.log("here3",flag)
     //   user.save(function (err) {
     //     if (err) {
     //       res.render('register', {errorMessages: err});
@@ -61,6 +65,11 @@ router.route('/register')
     //       res.redirect('/login');
     //     }
     //   })
+    }
+    console.log("here1",flag)
+    if (flag == 1){
+      console.log("here")
+      res.redirect('/');
     }
   });
 

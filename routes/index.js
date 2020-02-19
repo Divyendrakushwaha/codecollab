@@ -10,7 +10,9 @@ var nodemailer = require('nodemailer');
 
 router.get('/', function(req, res, next) {
   console.log(req.user);
-  res.render('index', { title: 'Code Talkers - a platform for sharing code.', 'user': req.user });
+  if(req.user){res.render('index', { title: 'Code Talkers - a platform for sharing code.', 'user': req.user }); }
+  res.render('firstpage', { title: 'Code Talkers - a platform for sharing code.', 'user': req.user,layout:false });
+  
 });
 
 router.get('/about', function(req, res, next) {

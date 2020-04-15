@@ -27,17 +27,18 @@ router.get('/createTask', function(req, res) {
 router.get('/task/:id', function(req, res) {
  
   if(req.user){
+    console.log(req.params.id);
   var o_id = new ObjectId(req.params.id);
   if (req.params.id) {
     cl2.findOne({_id: o_id}, function(err, data) {
-      
+     
       if (err) {
         console.log(err);
         res.render('error');
       }
 
       if (data) {
-        
+        console.log(data)
         res.render('task', {content: data.content, roomId: data._id,user: req.user});
       } else {
         res.render('error');

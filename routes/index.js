@@ -9,9 +9,13 @@ var nodemailer = require('nodemailer');
 
 
 router.get('/', function(req, res, next) {
-  console.log(req.user);
-  if(req.user){res.render('index', { title: 'Code Talkers - a platform for sharing code.', 'user': req.user }); }
-  res.render('firstpage', { title: 'Code Talkers - a platform for sharing code.', 'user': req.user,layout:false });
+  console.log("///",req.user);
+  if(req.user){
+    console.log("userloginnm")
+    res.render('index', { title: 'Code Talkers - a platform for sharing code.', 'user': req.user }); }
+    else{
+  res.render('firstpage', { title: 'Code Talkers - a platform for sharing code.',layout:false });
+    }
   
 });
 

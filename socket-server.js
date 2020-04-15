@@ -1,10 +1,15 @@
 'use strict';
 
-var socketIO = require('socket.io');
-var ot = require('ot');
+import socketIO from 'socket.io';
+import { EditorSocketIOServer } from 'ot.d.ts';
 var roomList = {};
-
-module.exports = function(server) {
+var Task=require('./models/task');
+mongoUtil.connectToServer( function( err, client ) {
+  if (err) console.log(err);
+  var db = mongoUtil.getDb();
+  var cl2=db.collection( 'Task' );
+console.log("was here")
+export default function(server) {
   var str = 'This is a Markdown heading \n\n' +
             'var i = i + 1;';
 
@@ -12,9 +17,9 @@ module.exports = function(server) {
   io.on('connection', function(socket) {
     socket.on('joinRoom', function(data) {
       if (!roomList[data.room]) {
-        var socketIOServer = new ot.EditorSocketIOServer(str, [], data.room, function(socket, cb) {
+        var socketIOServer = new EditorSocketIOServer(str, [], data.room, function(socket, cb) {
           var self = this;
-          Task.findByIdAndUpdate(data.room, {content: self.document}, function(err) {
+          cl2.findByIdAndUpdate(data.room, {content: self.document}, function(err) {
             if (err) return cb(false);
             cb(true);
           });
@@ -38,3 +43,4 @@ module.exports = function(server) {
     });
   })
 }
+});
